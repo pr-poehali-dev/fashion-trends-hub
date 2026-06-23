@@ -1,16 +1,15 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-const HERO = 'https://cdn.poehali.dev/projects/28c3b3c0-b9da-4434-9883-02a81ef32646/files/acd8210f-c261-4ba9-bda5-24477e7e7f97.jpg';
-const BOUTIQUE = 'https://cdn.poehali.dev/projects/28c3b3c0-b9da-4434-9883-02a81ef32646/files/1f324ba1-a041-4a19-8e43-d8bae3cc54a7.jpg';
-const GALLERY = 'https://cdn.poehali.dev/projects/28c3b3c0-b9da-4434-9883-02a81ef32646/files/963b87fa-8589-4df9-aae4-c965b0c00f98.jpg';
-
-const NAV = ['Главная', 'Тренды', 'Культура', 'События', 'Селебрити', 'Локации', 'Партнёры', 'О проекте', 'Контакты'];
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
+import { HERO, BOUTIQUE, GALLERY, SECTIONS, PARTNERS, CATEGORIES } from '@/data/content';
 
 const FEATURES = [
   {
+    slug: 'trends',
     tag: 'Тренды',
     title: 'Тихая роскошь: новая грамматика гардероба',
     excerpt: 'Как минимализм без логотипов стал главным языком статуса и почему кашемир говорит громче любых принтов.',
@@ -18,34 +17,16 @@ const FEATURES = [
     read: '6 мин',
   },
   {
+    slug: 'culture',
     tag: 'Культура',
-    title: 'Сцена и силуэт: мода в современном театре',
-    excerpt: 'От костюмов больших премьер до закулисной эстетики — диалог подиума и сценического искусства.',
+    title: 'Сцена и силуэт: мода в современном искусстве',
+    excerpt: 'От костюмов больших премьер до закулисной эстетики — диалог подиума и культуры.',
     image: GALLERY,
     read: '8 мин',
   },
 ];
 
-const STORIES = [
-  { tag: 'Селебрити', title: 'Иконы стиля нового сезона', meta: 'Портреты', icon: 'Star' },
-  { tag: 'События', title: 'Календарь главных недель моды', meta: 'Гид', icon: 'CalendarDays' },
-  { tag: 'Локации', title: 'Города, где рождается вкус', meta: 'Путешествия', icon: 'MapPin' },
-  { tag: 'Культура', title: 'Выставки и галереи сезона', meta: 'Арт', icon: 'Palette' },
-  { tag: 'Тренды', title: 'Палитра наступающего года', meta: 'Цвет', icon: 'Sparkles' },
-  { tag: 'События', title: 'Ужины, премьеры и вернисажи', meta: 'Афиша', icon: 'Wine' },
-];
-
-const PARTNERS = [
-  { name: 'Atelier Noir', cat: 'Дом моды', icon: 'Shirt' },
-  { name: 'Galerie Lumière', cat: 'Галерея', icon: 'Palette' },
-  { name: 'Maison Café', cat: 'Ресторан', icon: 'Utensils' },
-  { name: 'Riviera Resort', cat: 'Курорт', icon: 'Palmtree' },
-];
-
-const CATEGORIES = ['Тренды', 'Культура', 'События', 'Селебрити', 'Локации', 'Архитектура', 'Кино', 'Музыка', 'Рестораны'];
-
 export default function Index() {
-  const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>(['Тренды', 'Культура']);
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -55,38 +36,11 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between h-16">
-          <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Меню">
-            <Icon name={open ? 'X' : 'Menu'} size={22} />
-          </button>
-          <a href="#top" className="font-serif text-2xl md:text-3xl tracking-wide-luxe font-semibold">
-            MAISON
-          </a>
-          <nav className="hidden lg:flex items-center gap-7 text-[11px] uppercase tracking-wide-luxe">
-            {NAV.slice(1, 7).map((n) => (
-              <a key={n} href="#" className="link-underline text-muted-foreground hover:text-foreground transition-colors">
-                {n}
-              </a>
-            ))}
-          </nav>
-          <a href="#subscribe" className="hidden md:inline-block text-[11px] uppercase tracking-wide-luxe border border-foreground px-5 py-2 hover:bg-foreground hover:text-background transition-colors">
-            Подписаться
-          </a>
-        </div>
-        {open && (
-          <nav className="lg:hidden border-t border-border bg-background px-6 py-4 flex flex-col gap-3 text-sm uppercase tracking-wide-luxe animate-fade-in">
-            {NAV.map((n) => (
-              <a key={n} href="#" className="text-muted-foreground hover:text-foreground py-1">{n}</a>
-            ))}
-          </nav>
-        )}
-      </header>
+      <SiteHeader />
 
       {/* Hero */}
-      <section id="top" className="relative h-[100svh] min-h-[640px] flex items-end overflow-hidden">
-        <img src={HERO} alt="MAISON" className="absolute inset-0 w-full h-full object-cover animate-slow-zoom" />
+      <section className="relative h-[100svh] min-h-[640px] flex items-end overflow-hidden">
+        <img src={HERO} alt="Эстет" className="absolute inset-0 w-full h-full object-cover animate-slow-zoom" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/35" />
         <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 pb-16 md:pb-24">
           <p className="text-white/80 text-[11px] uppercase tracking-luxe mb-5 animate-fade-in">
@@ -99,9 +53,9 @@ export default function Index() {
             Мода, архитектура, искусство, события и места — всё, что вдохновляет на собственный вкус.
           </p>
           <div className="flex flex-wrap gap-4 mt-9 animate-fade-up" style={{ animationDelay: '0.3s', opacity: 0 }}>
-            <a href="#stories" className="bg-white text-black px-8 py-3 text-[11px] uppercase tracking-wide-luxe hover:bg-gold transition-colors">
+            <Link to="/razdel/trends" className="bg-white text-black px-8 py-3 text-[11px] uppercase tracking-wide-luxe hover:bg-gold transition-colors">
               Читать выпуск
-            </a>
+            </Link>
             <a href="#subscribe" className="border border-white/60 text-white px-8 py-3 text-[11px] uppercase tracking-wide-luxe hover:bg-white hover:text-black transition-colors">
               Подписка на темы
             </a>
@@ -125,13 +79,13 @@ export default function Index() {
             <p className="text-gold text-[11px] uppercase tracking-luxe mb-3">Главное</p>
             <h2 className="font-serif text-4xl md:text-5xl">Выбор редакции</h2>
           </div>
-          <a href="#" className="hidden md:inline-block text-[11px] uppercase tracking-wide-luxe link-underline text-muted-foreground">
+          <Link to="/razdel/trends" className="hidden md:inline-block text-[11px] uppercase tracking-wide-luxe link-underline text-muted-foreground">
             Все материалы →
-          </a>
+          </Link>
         </div>
         <div className="grid md:grid-cols-2 gap-8 md:gap-12">
           {FEATURES.map((f) => (
-            <article key={f.title} className="group cursor-pointer">
+            <Link to={`/razdel/${f.slug}`} key={f.title} className="group cursor-pointer block">
               <div className="relative overflow-hidden aspect-[4/5] mb-6">
                 <img src={f.image} alt={f.title} className="w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
                 <span className="absolute top-4 left-4 bg-background/90 px-3 py-1 text-[10px] uppercase tracking-wide-luxe">{f.tag}</span>
@@ -141,26 +95,26 @@ export default function Index() {
               <span className="text-[11px] uppercase tracking-wide-luxe text-muted-foreground flex items-center gap-2">
                 <Icon name="Clock" size={13} /> {f.read} чтения
               </span>
-            </article>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* Stories grid */}
+      {/* Sections grid */}
       <section className="bg-secondary py-20 md:py-28">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <p className="text-gold text-[11px] uppercase tracking-luxe mb-3 text-center">Рубрики</p>
           <h2 className="font-serif text-4xl md:text-5xl text-center mb-14">Жизнь вокруг моды</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border">
-            {STORIES.map((s) => (
-              <article key={s.title} className="bg-secondary p-8 md:p-10 group cursor-pointer hover:bg-background transition-colors">
+            {SECTIONS.map((s) => (
+              <Link to={`/razdel/${s.slug}`} key={s.slug} className="bg-secondary p-8 md:p-10 group cursor-pointer hover:bg-background transition-colors block">
                 <Icon name={s.icon} size={26} className="text-gold mb-6" />
-                <p className="text-[10px] uppercase tracking-wide-luxe text-muted-foreground mb-3">{s.tag} · {s.meta}</p>
-                <h3 className="font-serif text-2xl leading-tight group-hover:text-gold transition-colors">{s.title}</h3>
+                <p className="text-[10px] uppercase tracking-wide-luxe text-muted-foreground mb-3">{s.nav} · {s.articles.length} статьи</p>
+                <h3 className="font-serif text-2xl leading-tight group-hover:text-gold transition-colors">{s.tagline}</h3>
                 <span className="inline-flex items-center gap-2 mt-5 text-[11px] uppercase tracking-wide-luxe link-underline">
                   Открыть <Icon name="ArrowRight" size={13} />
                 </span>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -172,7 +126,7 @@ export default function Index() {
         <p className="font-serif italic text-3xl md:text-5xl leading-tight">
           «Мода — это то, как мы рассказываем о времени, в котором живём».
         </p>
-        <p className="mt-8 text-[11px] uppercase tracking-luxe text-muted-foreground">Редакция MAISON</p>
+        <p className="mt-8 text-[11px] uppercase tracking-luxe text-muted-foreground">Редакция Эстет</p>
       </section>
 
       {/* Partners */}
@@ -185,7 +139,7 @@ export default function Index() {
           </p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {PARTNERS.map((p) => (
-              <a key={p.name} href="#" className="border border-background/20 p-8 text-center group hover:border-gold transition-colors">
+              <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" className="border border-background/20 p-8 text-center group hover:border-gold transition-colors">
                 <Icon name={p.icon} size={28} className="text-gold mx-auto mb-5" />
                 <h3 className="font-serif text-2xl mb-1">{p.name}</h3>
                 <p className="text-[10px] uppercase tracking-wide-luxe text-background/50 mb-4">{p.cat}</p>
@@ -247,43 +201,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-foreground text-background pt-16 pb-8">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="grid md:grid-cols-4 gap-10 mb-14">
-            <div className="md:col-span-1">
-              <p className="font-serif text-3xl tracking-wide-luxe mb-4">MAISON</p>
-              <p className="text-background/60 font-light text-sm leading-relaxed">
-                Элегантный журнал о моде, культуре и эстетике современной жизни.
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-luxe text-gold mb-4">Разделы</p>
-              <ul className="space-y-2.5 text-sm text-background/70">
-                {NAV.slice(1, 6).map((n) => <li key={n}><a href="#" className="link-underline">{n}</a></li>)}
-              </ul>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-luxe text-gold mb-4">Ещё</p>
-              <ul className="space-y-2.5 text-sm text-background/70">
-                {NAV.slice(6).map((n) => <li key={n}><a href="#" className="link-underline">{n}</a></li>)}
-              </ul>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-luxe text-gold mb-4">Мы в сети</p>
-              <div className="flex gap-4">
-                {['Instagram', 'Send', 'Youtube'].map((s) => (
-                  <a key={s} href="#" className="text-background/70 hover:text-gold transition-colors"><Icon name={s} size={20} /></a>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-background/15 pt-6 flex flex-col md:flex-row justify-between gap-3 text-[11px] uppercase tracking-wide-luxe text-background/50">
-            <span>© 2026 MAISON. Все права защищены.</span>
-            <span>Сделано с любовью к эстетике</span>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
