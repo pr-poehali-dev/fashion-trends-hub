@@ -21,6 +21,8 @@ export default function Section() {
     );
   }
 
+  const [featured, ...rest] = section.articles;
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SiteHeader />
@@ -42,33 +44,81 @@ export default function Section() {
         </div>
       </section>
 
-      {/* Articles */}
-      <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-20 md:py-28">
-        <p className="text-gold text-[11px] uppercase tracking-luxe mb-3">Материалы</p>
-        <h2 className="font-serif text-4xl md:text-5xl mb-14">Читать сейчас</h2>
-        <div className="grid md:grid-cols-3 gap-px bg-border">
-          {section.articles.map((a) => (
-            <a
-              key={a.title}
-              href={a.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-background p-8 md:p-10 group flex flex-col hover:bg-secondary transition-colors"
-            >
-              <span className="text-[10px] uppercase tracking-wide-luxe text-gold mb-5">{a.source}</span>
-              <h3 className="font-serif text-2xl leading-tight mb-4 group-hover:text-gold transition-colors">{a.title}</h3>
-              <p className="text-muted-foreground font-light leading-relaxed mb-8 flex-1">{a.excerpt}</p>
-              <div className="flex items-center justify-between text-[11px] uppercase tracking-wide-luxe">
-                <span className="text-muted-foreground flex items-center gap-2"><Icon name="Clock" size={13} /> {a.read}</span>
-                <span className="inline-flex items-center gap-1.5 group-hover:text-gold transition-colors">Читать <Icon name="ArrowUpRight" size={14} /></span>
+      {/* Featured article */}
+      <section className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-24">
+        <p className="text-gold text-[11px] uppercase tracking-luxe mb-3">Главное в разделе</p>
+        <Link
+          to={`/razdel/${section.slug}/${featured.id}`}
+          className="group grid md:grid-cols-2 gap-10 md:gap-16 items-center"
+        >
+          <div className="relative overflow-hidden aspect-[4/3]">
+            <img src={featured.image} alt={featured.title} className="w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
+          </div>
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-9 h-9 rounded-full bg-foreground text-background flex items-center justify-center text-[11px] font-semibold">
+                {featured.author.initials}
               </div>
-            </a>
-          ))}
-        </div>
+              <div>
+                <p className="text-sm font-medium">{featured.author.name}</p>
+                <p className="text-[11px] text-muted-foreground">{featured.author.role}</p>
+              </div>
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl leading-tight mb-4 group-hover:text-gold transition-colors">
+              {featured.title}
+            </h2>
+            <p className="text-muted-foreground font-light leading-relaxed mb-6">{featured.excerpt}</p>
+            <div className="flex items-center gap-5 text-[11px] uppercase tracking-wide-luxe text-muted-foreground">
+              <span className="flex items-center gap-1.5"><Icon name="Calendar" size={13} />{featured.date}</span>
+              <span className="flex items-center gap-1.5"><Icon name="Clock" size={13} />{featured.read} чтения</span>
+            </div>
+            <span className="inline-flex items-center gap-2 mt-8 text-[11px] uppercase tracking-wide-luxe group-hover:text-gold transition-colors">
+              Читать полностью <Icon name="ArrowRight" size={14} />
+            </span>
+          </div>
+        </Link>
       </section>
 
+      {/* Rest articles */}
+      {rest.length > 0 && (
+        <section className="bg-secondary py-16 md:py-20">
+          <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+            <p className="text-gold text-[11px] uppercase tracking-luxe mb-10">Ещё материалы</p>
+            <div className="grid md:grid-cols-2 gap-px bg-border">
+              {rest.map((a) => (
+                <Link
+                  key={a.id}
+                  to={`/razdel/${section.slug}/${a.id}`}
+                  className="bg-secondary p-8 md:p-10 group flex flex-col hover:bg-background transition-colors"
+                >
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 rounded-full bg-foreground text-background flex items-center justify-center text-[10px] font-semibold shrink-0">
+                      {a.author.initials}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">{a.author.name}</p>
+                      <p className="text-[10px] text-muted-foreground">{a.author.role}</p>
+                    </div>
+                  </div>
+                  <h3 className="font-serif text-2xl leading-tight mb-3 group-hover:text-gold transition-colors">{a.title}</h3>
+                  <p className="text-muted-foreground font-light leading-relaxed mb-8 flex-1">{a.excerpt}</p>
+                  <div className="flex items-center justify-between text-[11px] uppercase tracking-wide-luxe">
+                    <span className="text-muted-foreground flex items-center gap-1.5">
+                      <Icon name="Clock" size={13} />{a.read} чтения
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 group-hover:text-gold transition-colors">
+                      Читать <Icon name="ArrowRight" size={14} />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Other sections */}
-      <section className="bg-secondary py-16">
+      <section className="py-14">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <p className="text-gold text-[11px] uppercase tracking-luxe mb-6">Другие разделы</p>
           <div className="flex flex-wrap gap-3">
